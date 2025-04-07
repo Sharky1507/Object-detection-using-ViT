@@ -20,6 +20,6 @@ A Flask-based web application for real-time zero-shot object detection using Goo
 
 ### Installation
 ```bash
-git clone https://github.com/yourusername/owlvit-detector.git
+git clone https://github.com/Sharky1507/Object-detection-using-ViT.git
 cd owlvit-detector
 pip install -r requirements.txt
