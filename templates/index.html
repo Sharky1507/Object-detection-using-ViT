@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Vision Dashboard</title>
+    <style>
+        body { 
+            margin: 0;
+            background: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        #videoFeed {
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .controls {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #333;
+            border: 1px solid #4CAF50;
+            color: white;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .log-entry {
+            background: #333;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <img id="videoFeed" src="{{ url_for('video_feed') }}">
+        </div>
+        <div class="controls">
+            <h2>Detection Controls</h2>
+            <input type="text" id="labelsInput" 
+                   value="{{ ', '.join(labels) }}">
+            <button onclick="updateLabels()">Update Detection Labels</button>
+            
+            <h3>Recent Detections</h3>
+            <div id="detectionLog"></div>
+            
+            <br>
+            <a href="/export_logs" download>
+                <button>Export Full Log</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function updateLabels() {
+            const labels = document.getElementById('labelsInput').value
+                .split(',')
+                .map(l => l.trim())
+                .filter(l => l);
+            
+            fetch('/update_labels', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({labels})
+            });
+        }
+
+        // Update detection log every second
+        function updateLogs() {
+            fetch('/get_logs')
+                .then(r => r.json())
+                .then(logs => {
+                    const logDiv = document.getElementById('detectionLog');
+                    logDiv.innerHTML = logs.reverse().map(entry => 
+                        `<div class="log-entry">
+                            [${new Date(entry.timestamp).toLocaleTimeString()}] 
+                            ${entry.label} (${entry.score})
+                        </div>`
+                    ).join('');
+                });
+        }
+        
+        setInterval(updateLogs, 1000);
+        updateLogs();
+    </script>
+</body>
+</html>
