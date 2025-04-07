@@ -15,7 +15,6 @@ Detect any object simply by describing it in natural language!
 - ✍️ Web-based control of detection labels  
 - 📊 Live detection logging  
 - 📁 CSV export of detection history  
-- 📱 Mobile-responsive UI  
 
 ---
 
