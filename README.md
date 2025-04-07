@@ -34,9 +34,6 @@ The Flask interface offers real-time control over detection and instant visual f
 
 ## ⚠️ Challenges Faced
 
-- **Precision Trade-offs:**  
-  Balancing detection sensitivity (recall) with minimizing false positives — especially for small or ambiguous objects.
-
 - **Text Ambiguity:**  
   Prompt phrasing significantly affects performance. (e.g., _"a watch"_ vs _"a digital wristwatch with metal band"_)
 
